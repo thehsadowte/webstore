@@ -5,11 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { formatCurrency } from '@/lib/formatters';
 import { useState } from 'react';
+import addProduct from '../_actions/products';
 
 export default function ProductForm() {
   const [priceInCents, setPriceInCents] = useState<number>();
   return (
-    <form className="space-y-8">
+    <form action={addProduct} className="space-y-8">
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
         <Input type="text" id="text" name="name" required />
