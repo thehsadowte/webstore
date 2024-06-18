@@ -5,8 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { formatCurrency } from '@/lib/formatters';
 import { useState } from 'react';
-import addProduct from '../_actions/products';
+
 import { useFormState, useFormStatus } from 'react-dom';
+import { addProduct } from '../_actions/products';
 
 export default function ProductForm() {
   const [priceInCents, setPriceInCents] = useState<number>();
@@ -49,7 +50,7 @@ export default function ProductForm() {
       </div>
       <div className="space-y-2">
         <Label htmlFor="image">Image</Label>
-        <Input type="image" id="image" name="image" required />
+        <Input type="file" id="image" name="image" required />
         {error.image && <div className="text-destructive">{error.image}</div>}
       </div>
       <SubmitButton />

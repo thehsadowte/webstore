@@ -1,7 +1,6 @@
-import * as React from 'react';
-import PageHeader from '../_components/PageHeader';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+
+import Link from 'next/link';
 import {
   Table,
   TableBody,
@@ -10,19 +9,23 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import db from '@/db/db';
 import { CheckCircle2, MoreVertical, XCircle } from 'lucide-react';
 import { formatCurrency, formatNumber } from '@/lib/formatters';
-import db from '@/db/db';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import PageHeader from '../_components/PageHeader';
+import {
+  ActiveToggleDropdownItem,
+  DeleteDropdownItem,
+} from '../_components/ProductActions';
 
-// export interface IAppProps {}
-
-export default function Products() {
+export default function AdminProductsPage() {
   return (
     <>
       <div className="flex justify-between items-center gap-4">
@@ -36,7 +39,7 @@ export default function Products() {
   );
 }
 
-const ProductsTable = async () => {
+async function ProductsTable() {
   const products = await db.product.findMany({
     select: {
       id: true,
@@ -48,15 +51,14 @@ const ProductsTable = async () => {
     orderBy: { name: 'asc' },
   });
 
-  if (products.length === 0)
-    return <p className="text-destructive">No products found ...</p>;
+  if (products.length === 0) return <p>No products found</p>;
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="w-0">
-            <span className="sr-only">Available for Purchase</span>
+            <span className="sr-only">Available For Purchase</span>
           </TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Price</TableHead>
@@ -72,14 +74,13 @@ const ProductsTable = async () => {
             <TableCell>
               {product.isAvailableForPurchase ? (
                 <>
-                  <CheckCircle2 />
                   <span className="sr-only">Available</span>
+                  <CheckCircle2 />
                 </>
               ) : (
                 <>
                   <span className="sr-only">Unavailable</span>
-
-                  <XCircle></XCircle>
+                  <XCircle className="stroke-destructive" />
                 </>
               )}
             </TableCell>
@@ -92,10 +93,9 @@ const ProductsTable = async () => {
                   <MoreVertical />
                   <span className="sr-only">Actions</span>
                 </DropdownMenuTrigger>
-
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <a download={`/admin/products/${product.id}/download`}>
+                    <a download href={`/admin/products/${product.id}/download`}>
                       Download
                     </a>
                   </DropdownMenuItem>
@@ -104,6 +104,15 @@ const ProductsTable = async () => {
                       Edit
                     </Link>
                   </DropdownMenuItem>
+                  <ActiveToggleDropdownItem
+                    id={product.id}
+                    isAvailableForPurchase={product.isAvailableForPurchase}
+                  />
+                  <DropdownMenuSeparator />
+                  <DeleteDropdownItem
+                    id={product.id}
+                    disabled={product._count.orders > 0}
+                  />
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
@@ -112,4 +121,4 @@ const ProductsTable = async () => {
       </TableBody>
     </Table>
   );
-};
+}
