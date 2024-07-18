@@ -1,7 +1,7 @@
-import React from 'react';
-import PageHeader from '../../_components/PageHeader';
-import ProductForm from '../../_components/ProductForm';
-import db from '@/db/db';
+import React from "react";
+import PageHeader from "../../../_components/PageHeader";
+import ProductForm from "../../../_components/ProductForm";
+import db from "@/db/db";
 
 const EditProductPage = async ({
   params: { id },
