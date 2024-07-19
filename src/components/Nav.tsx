@@ -9,8 +9,8 @@ type Props = {};
 
 export function Nav({ children }: { children: ReactNode }) {
   return (
-    <nav className="bg-primary text-primary-foreground flex justify-center px-4">
-      Have a good coding{children}
+    <nav className="bg-cyan-800 text-primary-foreground flex justify-center px-4">
+      {children}
     </nav>
   );
 }
